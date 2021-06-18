@@ -3,45 +3,61 @@ package com.okellomwaka.eazysacco;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceControl;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
 public class Transactions_Activity extends AppCompatActivity {
     //declare sections pager adapter
-   // private SectionsPagerAdapter sectionsPagerAdapter;
+    private SectionsPagerAdapter sectionsPagerAdapter;
     //view pager
     private ViewPager viewPager;
+
+    private TextView bal,account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions_);
+        Intent i = getIntent();
+        String acc = i.getStringExtra("account");
+        String amount = i.getStringExtra("amount");
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+
         //find toolbar
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     //    setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-
-   //     sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
+       sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
+               Transactions_Activity.this,acc,tabLayout.getTabCount());
         // Set up the ViewPager with the sections adapter.
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-  //      viewPager.setAdapter(sectionsPagerAdapter);
-
+        viewPager =  findViewById(R.id.viewpager);
+        bal = findViewById(R.id.AccountBalance);
+        account = findViewById(R.id.accname_balance);
+        if(acc != null || amount!=null) {
+            account.setText(acc);
+            bal.setText(amount);
+        }
+        viewPager.setAdapter(sectionsPagerAdapter);
         //find the tablayout and set viewpager to it
-        TabLayout tabLayout = findViewById(R.id.tabLayout);
+
         tabLayout.setupWithViewPager(viewPager);
 
 
 
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
